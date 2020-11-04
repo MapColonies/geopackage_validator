@@ -10,7 +10,7 @@ triggers = db_conn.get_triggers(db)
 
 table_name = os.path.basename(geo_file).split('.')[0]
 main_data = db_conn.list_table_columns(db, table_name)
-db_conn.list_tile_matrix_data(db,'gpkg_tile_matrix')
+db_conn.get_all_rows_tables(db, 'gpkg_tile_matrix')
 print(tables)
 print(indices)
 print(triggers)

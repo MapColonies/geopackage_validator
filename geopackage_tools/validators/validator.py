@@ -28,7 +28,8 @@ def validate_index(cursor):
         return False, indices_names
 
 
-def validate_tile_matrix(cursor):
+#todo fix pixel size float precision error with numpy.isclose() after validating with sharon about standart
+def validate_tile_matrix(cursor,table_name):
     """
     validate if all tile matrix table contain all relevant fields and data according standard
     """
@@ -36,7 +37,7 @@ def validate_tile_matrix(cursor):
     VAL_START_ZOOM_LEVEL
     max_level = VAL_MAX_ZOOM_LEVEL
 
-    res = db.list_tile_matrix_data(cursor)
+    res = db.get_all_rows_tables(cursor,table_name)
     expected_row_dict = {
         'zoom_level': VAL_START_ZOOM_LEVEL,
         'matrix_width': VAL_MAT_W,
@@ -85,4 +86,6 @@ def _update_dicts(expected_row_dict):
     expected_row_dict['pixel_x_size'] /= 2
     expected_row_dict['pixel_y_size'] /= 2
 
+def validate_crs(cursor, table_name):
+    res = db.get_all_rows_tables(cursor, GPKG_SPATIAL_REF_SYS)
     pass

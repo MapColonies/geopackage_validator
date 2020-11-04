@@ -33,7 +33,9 @@ def list_table_columns(cursor, table_name):
     return list(map(lambda x: x[0], cursor.description))
 
 
-def list_tile_matrix_data(cursor, table_name="gpkg_tile_matrix"):
-    """ query that return all data included on gpkg_tile_matrix table """
+def get_all_rows_tables(cursor, table_name):
+    """ query that return all rows data included on given table name"""
     cursor.execute("SELECT * FROM "+table_name)
     return cursor.fetchall()
+
+# def
