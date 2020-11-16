@@ -86,6 +86,47 @@ def _update_dicts(expected_row_dict):
     expected_row_dict['pixel_x_size'] /= 2
     expected_row_dict['pixel_y_size'] /= 2
 
+
 def validate_crs(cursor, table_name):
-    res = db.get_all_rows_tables(cursor, GPKG_SPATIAL_REF_SYS)
-    pass
+    res = db.get_all_rows_tables(cursor, table_name)
+    return res
+
+
+def aseert_package(url):
+    """
+    This method except package url and scan geopackage if valid
+    :param url: geopackage location path
+    :return: bool - True if package is ok, False if invalid package
+    """
+
+    cur = db.init(url)
+    file_name = os.path.basename(url)
+
+    # validate all tables consist + the  unique table related to file name
+    state1, table_list = validate_tables(file_name.split('.')[0], cur)
+    _logger.info('Checked if package consist all required tables: [%s]', state1)
+    _logger.debug("Tables name that package [%s] contain: [%s]", file_name, " | ".join(table_list))
+
+    # validate tile_matrix table consist all important rows
+    cols_list = db.list_table_columns(cur, file_name.split('.')[0])
+    state2 = all(elem in cols_list for elem in TILE_MATRIX_COLUMNS)
+    _logger.info('Checked if table [tile_matrix] consist all required columns: [%s]', state2)
+    _logger.debug("Columns name that tile_matrix table contain: [%s]", " | ".join(cols_list))
+
+    # validate index
+    state3, index_list = validate_index(cur)
+    _logger.info('Checked if package consist required "%s" index: [%s]', TILES_INDEX, state3)
+    _logger.debug("Indices name that package [%s] contain: [%s]", file_name, " | ".join(index_list))
+
+    # validate crs
+    crs_list = validate_crs(cur, GPKG_SPATIAL_REF_SYS)
+    crs_type = [c[0] for c in crs_list]
+    if CRS_WGS_84 in crs_type:
+        idx = crs_type.index(CRS_WGS_84)
+        crs = crs_list[idx]
+        state4 = ORGANIZATION in crs and SRS_ID in crs
+        _logger.info('Checked if package CRS data include the required system [WGS84] : [%s] ', state4)
+        _logger.debug("CRS name that package [%s] contain: [%s]", file_name, " | ".join(crs_type))
+        _logger.debug("CRS [%s] include current data [%s] ", CRS_WGS_84, " | ".join([str(c) for c in crs]))
+    ok = all([state1, state2, state3])
+    return ok

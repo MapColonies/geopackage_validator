@@ -6,7 +6,7 @@ from geopackage_tools.infra import db_conn as db
 from geopackage_tools.validators import validator as validator
 _logger = logging.getLogger("gp_validator")
 geo_file = '/home/ronenk1/dev/geopackage_tools/shlomiko9.GPKG'
-
+validator.aseert_package(geo_file)
 cur = db.init(geo_file)
 file_name = os.path.basename(geo_file).split('.')[0]
 

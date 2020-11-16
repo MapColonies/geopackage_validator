@@ -1,6 +1,8 @@
+
 import logging
 
-logger = logging.getLogger()
+# logger = logging.getLogger()
+logger = logging.getLogger('gp_validator')
 logger.setLevel(logging.DEBUG)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
