@@ -13,7 +13,7 @@ setuptools.setup(
     description="geopackages validator utility",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/MapColonies/geopackage_validator.git",
     packages=setuptools.find_packages(),
     install_requires=requirements,
     use_scm_version=True,
