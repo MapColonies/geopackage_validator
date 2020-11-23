@@ -12,4 +12,3 @@ import logging
 # ch.setFormatter(formatter)
 # # add the handlers to the logger
 # logger.addHandler(ch)
-
