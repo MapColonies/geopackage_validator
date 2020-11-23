@@ -5,11 +5,12 @@ from geopackage_tools.config import *
 from geopackage_tools.infra import db_conn as db
 from geopackage_tools.validators import validator as validator
 _logger = logging.getLogger("gp_validator")
+logging.getLogger().setLevel(logging.DEBUG)
 geo_file = '/home/ronenk1/dev/geopackage_tools/shlomiko9.GPKG'
-validator.aseert_package(geo_file)
+RES = validator.aseert_package(geo_file)
 cur = db.init(geo_file)
 file_name = os.path.basename(geo_file).split('.')[0]
-
+validator.validate_tiles_index(cur, file_name)
 res_tables, tables_names = validator.validate_tables(file_name, cur)
 res_indices, indices_names = validator.validate_index(cur)
 

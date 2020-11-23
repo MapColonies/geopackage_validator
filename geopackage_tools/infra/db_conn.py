@@ -38,4 +38,11 @@ def get_all_rows_tables(cursor, table_name):
     cursor.execute("SELECT * FROM "+table_name)
     return cursor.fetchall()
 
-# def
+
+def get_index_query(cursor, table_name):
+    """
+    This method return data on index by table name
+    """
+    cursor.execute("SELECT * FROM sqlite_master WHERE type = 'index' AND tbl_name='"+table_name+"' ")
+    return cursor.fetchall()
+

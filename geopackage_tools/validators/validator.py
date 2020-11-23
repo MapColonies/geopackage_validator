@@ -92,6 +92,22 @@ def validate_crs(cursor, table_name):
     return res
 
 
+def validate_tiles_index(cursor, table_name):
+    """
+    Validate the geopackage include tiles matrix indexing according x,y,z
+
+    """
+    res = db.get_index_query(cursor, table_name)
+    indexes_names = [name[1] for name in res]
+    if 'tiles_index' not in indexes_names:
+        raise Exception('Index of tiles_matrix not exists')
+    try:
+        t_index = [idx for idx in res if idx[1] == 'tiles_index'][0][4]
+    except Exception:
+        raise Exception('Can not locate the tiles_index')
+    res = 'zoom_level' in t_index and 'tile_column' in t_index and 'tile_row' in t_index
+    return res, t_index
+
 def aseert_package(url):
     """
     This method except package url and scan geopackage if valid
@@ -128,5 +144,10 @@ def aseert_package(url):
         _logger.info('Checked if package CRS data include the required system [WGS84] : [%s] ', state4)
         _logger.debug("CRS name that package [%s] contain: [%s]", file_name, " | ".join(crs_type))
         _logger.debug("CRS [%s] include current data [%s] ", CRS_WGS_84, " | ".join([str(c) for c in crs]))
-    ok = all([state1, state2, state3])
+
+    # validate tile_matrix indexing
+    state5, index = validate_tiles_index(cur, file_name.split('.')[0])
+    _logger.info('Checked if package include tiles_matrix indexing to table [%s]: %s', file_name.split('.')[0], state5)
+    _logger.debug("tiles_matrix index: [%s]", index)
+    ok = all([state1, state2, state3, state4, state5])
     return ok
