@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="geopackage-validator", # Replace with your own username
+    name="gpval",  # geopackage_validator
     author="MC",
     description="geopackages validator utility",
     long_description=long_description,
