@@ -46,3 +46,10 @@ def get_index_query(cursor, table_name):
     cursor.execute("SELECT * FROM sqlite_master WHERE type = 'index' AND tbl_name='"+table_name+"' ")
     return cursor.fetchall()
 
+
+def get_single_column(cursor, column, table):
+    """
+    This function return single list of column's content provided by column name
+    :return: list of column's content
+    """
+    return [data[0] for data in cursor.execute(f"SELECT {column} FROM {table}")]

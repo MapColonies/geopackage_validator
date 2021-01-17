@@ -37,7 +37,7 @@ def validate_tile_matrix(cursor,table_name):
     VAL_START_ZOOM_LEVEL
     max_level = VAL_MAX_ZOOM_LEVEL
 
-    res = db.get_all_rows_tables(cursor,table_name)
+    res = db.get_all_rows_tables(cursor, table_name)
     expected_row_dict = {
         'zoom_level': VAL_START_ZOOM_LEVEL,
         'matrix_width': VAL_MAT_W,
@@ -85,6 +85,18 @@ def _update_dicts(expected_row_dict):
     expected_row_dict['matrix_height'] *= 2
     expected_row_dict['pixel_x_size'] /= 2
     expected_row_dict['pixel_y_size'] /= 2
+
+
+def validate_zoom_levels(url, max_zoom_level):
+    """
+    This method validate if geopackage consist tiles by max zoom level
+    :return: bool
+    """
+
+    cur = db.init(url)
+    file_name = os.path.basename(url)
+    content = db.get_single_column(cur, COL_ZOOM_LEVEL, file_name.split('.')[0])
+    return content
 
 
 def validate_crs(cursor, table_name):
