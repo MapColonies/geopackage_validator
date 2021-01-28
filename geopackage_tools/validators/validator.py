@@ -120,6 +120,7 @@ def validate_tiles_index(cursor, table_name):
     res = 'zoom_level' in t_index and 'tile_column' in t_index and 'tile_row' in t_index
     return res, t_index
 
+
 def aseert_package(url):
     """
     This method except package url and scan geopackage if valid
